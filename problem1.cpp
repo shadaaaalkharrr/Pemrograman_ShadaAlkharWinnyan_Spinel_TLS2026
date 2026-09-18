@@ -1,76 +1,58 @@
 #include <iostream>
 
-// User-defined function untuk menghapuskan elemen array dan menggeser sisa elemen
-void removeAt(int arr[], int &size, int index) {
-    for (int i = index; i < size - 1; i++) {
-        arr[i] = arr[i + 1];
+void hapusAstronot(int astronot[], int &total, int indeks) {
+    for (int i = indeks; i < total - 1; i++) {
+        astronot[i] = astronot[i + 1];
     }
-    size--;
+    total--;
 }
 
-// User-defined function untuk memperbarui nilai K berdasarkan nomor astronot tereliminasi
-int updateK(int currentK, int eliminatedAstronaut) {
-    if (eliminatedAstronaut % 2 == 0) {
-        currentK += 2;
-    } else {
-        currentK -= 1;
+int main() {
+    int n, k;
+    
+    std::cout << "Masukkan jumlah astronot (N): ";
+    std::cin >> n;
+    std::cout << "Masukkan nilai K awal: ";
+    std::cin >> k;
+
+    int astronot[1000];
+    for (int i = 0; i < n; i++) {
+        astronot[i] = i + 1;
     }
 
-    if (currentK < 2) {
-        currentK = 2;
-    }
-    return currentK;
-}
+    int pos = 0;
+    int total = n;
 
-// User-defined function utama untuk simulasi proses eliminasi
-void simulateSelection(int N, int initialK) {
-    int astronauts[1000];
-    for (int i = 0; i < N; i++) {
-        astronauts[i] = i + 1;
-    }
+    std::cout << "Urutan astronot yang tereliminasi: ";
 
-    int size = N;
-    int currentIndex = 0;
-    int K = initialK;
+    while (total > 1) {
+        pos = (pos + k - 1) % total;
+        int nomorDiuji = astronot[pos];
 
-    std::cout << "Urutan astronot yang dieliminasi: ";
-    bool first = true;
-
-    while (size > 1) {
-        // Hitung posisi astronot yang dieliminasi
-        currentIndex = (currentIndex + K - 1) % size;
-        int eliminated = astronauts[currentIndex];
-
-        if (!first) {
+        std::cout << nomorDiuji;
+        if (total > 2) {
             std::cout << ", ";
         }
-        std::cout << eliminated;
-        first = false;
 
-        // Hapus astronot dari daftar
-        removeAt(astronauts, size, currentIndex);
+        hapusAstronot(astronot, total, pos);
 
-        // Perbarui nilai K sesuai aturan
-        K = updateK(K, eliminated);
+        if (nomorDiuji % 2 == 0) {
+            k += 2;
+        } else {
+            k -= 1;
+        }
 
-        // Menjaga perputaran indeks jika mencapai akhir array
-        if (currentIndex >= size) {
-            currentIndex = 0;
+        if (k < 2) {
+            k = 2;
+        }
+
+        if (pos >= total) {
+            pos = 0;
         }
     }
 
     std::cout << std::endl;
-    std::cout << "Astronot terakhir yang bertahan: " << astronauts[0] << std::endl;
-}
-
-int main() {
-    int N, K;
-    std::cout << "Masukkan jumlah astronot (N): ";
-    std::cin >> N;
-    std::cout << "Masukkan nilai awal K: ";
-    std::cin >> K;
-
-    simulateSelection(N, K);
+    std::cout << "Astronot terakhir yang bertahan: " << astronot[0] << std::endl;
 
     return 0;
 }
